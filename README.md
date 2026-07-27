@@ -10,9 +10,9 @@
   - [x] 网站首页显示登录页面
   - [x] 用户名密码来自 `usermanagement` 数据库的 `admin` 表
   - [x] 登录成功后跳转到欢迎页面
-- [ ] **学生信息列表**
-  - [ ] 登录成功页展示 `student` 表数据（学号、姓名、性别、班级、电话、备注）
-  - [ ] 表格上方搜索框，支持学号 / 姓名 / 班级模糊查询
+- [x] **学生信息列表**
+  - [x] 登录成功页展示 `student` 表数据（学号、姓名、性别、班级、电话、备注）
+  - [x] 表格上方搜索框，支持学号 / 姓名 / 班级模糊查询
   - [ ] "添加学生" 超链接，跳转录入页，成功后返回列表并提示
   - [ ] 操作列：删除按钮（删除并刷新表格）
   - [ ] 操作列：修改按钮（跳转编辑页，保存后返回列表）
@@ -60,24 +60,30 @@
 
 ## 项目结构
 
+## 项目结构
+
 ```
 StudentM/
 ├── app/
 │   ├── layout.tsx              # 根布局
-│   ├── globals.css             # 全局样式
+│   ├── globals.css             # 全局样式（Tailwind + 主题变量）
 │   ├── page.tsx                # 首页（登录页面）
-│   ├── welcome/                # 欢迎页（登录成功后）
+│   ├── welcome/                # 欢迎页（学生信息列表）
 │   └── actions/
-│       └── auth.ts             # 登录 / 登出 / 会话守卫 Server Actions
+│       └── auth.ts             # 登录 / 登出 Server Actions
 ├── components/
-│   └── ui/                     # Shadcn UI 基础组件
+│   ├── ui/                     # Shadcn UI 基础组件（button/card/input/table 等）
+│   └── students/
+│       └── search-bar.tsx      # 学生搜索框（学号/姓名/班级模糊查询）
 ├── lib/
 │   ├── utils.ts                # cn 工具
-│   └── supabase/server.ts      # Supabase 服务端客户端
+│   ├── auth.ts                 # 会话守卫（isAuthenticated / requireAuth）
+│   ├── students.ts             # 学生数据访问层（增删改查 + 搜索）
+│   └── supabase/server.ts      # Supabase 服务端客户端（普通 + 特权）
 ├── db/
-│   └── schema.ts               # Drizzle ORM schema
+│   └── schema.ts               # Drizzle ORM schema（表结构定义）
 ├── supabase/
-│   └── schema.sql              # 数据库初始化 SQL
+│   └── schema.sql              # 数据库初始化 SQL（admin + student 表）
 └── ...
 ```
 
@@ -112,4 +118,5 @@ npm run dev
 
 每个新功能在独立分支开发，确认后合并到 `main` 并推送：
 
-- `feat/init-and-login` — 项目初始化与登录功能
+- `feat/init-and-login` — 项目初始化与登录功能（需求 1-3）
+- `feat/student-list-search` — 学生列表展示与模糊搜索（需求 5-6）
