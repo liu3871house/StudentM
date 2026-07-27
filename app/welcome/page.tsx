@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { SearchBar } from "@/components/students/search-bar";
 import { DeleteButton } from "@/components/students/delete-button";
+import { Pagination } from "@/components/students/pagination";
 import {
   Table,
   TableBody,
@@ -22,7 +23,12 @@ import {
 } from "@/components/ui/table";
 
 interface WelcomePageProps {
-  searchParams: Promise<{ keyword?: string; registered?: string }>;
+  searchParams: Promise<{
+    keyword?: string;
+    registered?: string;
+    page?: string;
+    pageSize?: string;
+  }>;
 }
 
 export default async function WelcomePage({ searchParams }: WelcomePageProps) {
@@ -31,7 +37,12 @@ export default async function WelcomePage({ searchParams }: WelcomePageProps) {
   const keyword = sp.keyword ?? "";
   const registered = sp.registered;
 
-  const { rows, total } = await listStudents(keyword, 1, 1000);
+  // 解析分页参数，pageSize 限定 1-20
+  const page = Math.max(1, Number(sp.page) || 1);
+  const rawPageSize = Number(sp.pageSize) || 10;
+  const pageSize = Math.min(20, Math.max(1, rawPageSize));
+
+  const { rows, total } = await listStudents(keyword, page, pageSize);
 
   return (
     <main className="min-h-screen bg-muted/30">
@@ -111,6 +122,10 @@ export default async function WelcomePage({ searchParams }: WelcomePageProps) {
                 )}
               </TableBody>
             </Table>
+
+            <Suspense fallback={null}>
+              <Pagination page={page} pageSize={pageSize} total={total} />
+            </Suspense>
           </CardContent>
         </Card>
       </div>
