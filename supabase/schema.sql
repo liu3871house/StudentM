@@ -51,6 +51,9 @@ create index if not exists idx_student_student_no on public.student (student_no)
 create index if not exists idx_student_name       on public.student (name);
 create index if not exists idx_student_class_name on public.student (class_name);
 
+-- 学号唯一约束（防止重复录入）
+create unique index if not exists idx_student_student_no_unique on public.student (student_no);
+
 -- 插入几条示例数据
 insert into public.student (student_no, name, gender, class_name, phone, remark)
 values
@@ -59,4 +62,4 @@ values
   ('2024003', '王五', '男', '计算机2402', '13800000003', '转专业学生'),
   ('2024004', '赵六', '女', '软件2401',   '13800000004', null),
   ('2024005', '钱七', '男', '软件2401',   '13800000005', '文艺委员')
-on conflict do nothing;
+on conflict (student_no) do nothing;
