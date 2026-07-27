@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { SearchBar } from "@/components/students/search-bar";
+import { DeleteButton } from "@/components/students/delete-button";
 import {
   Table,
   TableBody,
@@ -76,12 +77,13 @@ export default async function WelcomePage({ searchParams }: WelcomePageProps) {
                   <TableHead>班级</TableHead>
                   <TableHead>电话</TableHead>
                   <TableHead>备注</TableHead>
+                  <TableHead>操作</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {rows.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
+                    <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
                       暂无匹配的学生记录
                     </TableCell>
                   </TableRow>
@@ -94,6 +96,16 @@ export default async function WelcomePage({ searchParams }: WelcomePageProps) {
                       <TableCell>{s.class_name ?? "-"}</TableCell>
                       <TableCell>{s.phone ?? "-"}</TableCell>
                       <TableCell>{s.remark ?? "-"}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <DeleteButton id={s.id} name={s.name} />
+                          <Link href={`/students/${s.id}/edit`}>
+                            <Button size="sm" variant="outline">
+                              修改
+                            </Button>
+                          </Link>
+                        </div>
+                      </TableCell>
                     </TableRow>
                   ))
                 )}
